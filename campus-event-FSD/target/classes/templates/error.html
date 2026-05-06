@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page-content flex-center">
+    
+    <div class="empty-state glass-panel" style="max-width: 500px; padding: 40px;">
+        <i class="fas fa-exclamation-triangle fa-4x" style="color: #e74c3c;"></i>
+        <h2 class="mt-3">Oops! Something went wrong.</h2>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="mt-2" style="color: var(--text-light);"></p>
+        <p th:unless="${errorMessage}" class="mt-2" style="color: var(--text-light);">An unexpected error has occurred.</p>
+        <a th:href="@{/}" class="btn-primary mt-4">Return Home</a>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

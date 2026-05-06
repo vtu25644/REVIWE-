@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${event.id == null ? 'Create Event' : 'Edit Event'})}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page-content">
+    
+    <div class="back-link">
+        <a th:href="@{/admin/dashboard}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="form-container glass-panel" style="max-width: 800px;">
+        <div class="form-header">
+            <h2 th:text="${event.id == null ? 'Create New Event' : 'Edit Event'}">Create Event</h2>
+        </div>
+
+        <form th:action="${event.id == null ? '/admin/events/new' : '/admin/events/update/' + event.id}" 
+              th:object="${event}" method="post">
+            
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="title">Event Title</label>
+                    <input type="text" id="title" th:field="*{title}" required>
+                    <span class="error-msg" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                </div>
+                
+                <div class="form-group half">
+                    <label for="eventDate">Event Date & Time</label>
+                    <input type="datetime-local" id="eventDate" th:field="*{eventDate}" required>
+                    <span class="error-msg" th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="department">Department</label>
+                    <select id="department" th:field="*{department}" required>
+                        <option value="">Select Department</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option>
+                        <option value="Arts & Humanities">Arts & Humanities</option>
+                        <option value="Sciences">Sciences</option>
+                        <option value="University Wide">University Wide</option>
+                    </select>
+                    <span class="error-msg" th:if="${#fields.hasErrors('department')}" th:errors="*{department}"></span>
+                </div>
+                
+                <div class="form-group quarter">
+                    <label for="type">Event Type</label>
+                    <select id="type" th:field="*{type}" required>
+                        <option value="">Select Type</option>
+                        <option value="Seminar">Seminar</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Conference">Conference</option>
+                        <option value="Exhibition">Exhibition</option>
+                        <option value="Social">Social</option>
+                    </select>
+                    <span class="error-msg" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
+                </div>
+
+                <div class="form-group quarter">
+                    <label for="capacity">Capacity</label>
+                    <input type="number" id="capacity" th:field="*{capacity}" min="1" required>
+                    <span class="error-msg" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" th:field="*{description}" rows="5" required></textarea>
+                <span class="error-msg" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
+
+            <button type="submit" class="btn-primary" th:text="${event.id == null ? 'Create Event' : 'Update Event'}">Submit</button>
+            <a th:href="@{/admin/dashboard}" class="btn-outline">Cancel</a>
+        </form>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

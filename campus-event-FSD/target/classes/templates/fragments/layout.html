@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - Campus Events'">Campus Events</title>
+    <!-- Use Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="header">
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a th:href="@{/}" class="brand">
+                <i class="fas fa-university"></i> Campus<span>Events</span>
+            </a>
+
+            <!-- Global Search -->
+            <form th:action="@{/events}" method="get" class="search-form">
+                <input type="text" name="search" placeholder="Search events..." class="search-input">
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+            </form>
+
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/events}">All Events</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/my-events}">My Events</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/helpdesk}">Help Desk</a></li>
+                
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn-outline-sm">Login</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/register}" class="btn-primary-sm">Register</a>
+                </li>
+                
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/dashboard}">Admin Dashboard</a>
+                </li>
+
+                <!-- User Profile / Points -->
+                <li sec:authorize="isAuthenticated()" class="user-profile-nav">
+                    <span class="points-badge" title="Your Points">
+                        <i class="fas fa-star" style="color: gold;"></i> 
+                        <span th:text="${#authentication.principal.points ?: 0}">0</span> pts
+                    </span>
+                    <span class="user-greeting">Hi, <span th:text="${#authentication.principal.name}">User</span></span>
+                    <form th:action="@{/logout}" method="post" style="display:inline; margin-left: 10px;">
+                        <button type="submit" class="btn-outline-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<footer th:fragment="footer">
+    <div class="container">
+        <p>&copy; <span th:text="${#dates.year(#dates.createNow())}"></span> Campus Event Management System. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

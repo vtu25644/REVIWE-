@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Payment Checkout')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page-content" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    
+    <div class="glass-panel" style="max-width: 500px; width: 100%;">
+        
+        <div th:if="${errorMessage}" class="alert alert-error" style="margin-bottom: 20px;">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2><i class="fas fa-credit-card"></i> Payment Checkout</h2>
+            <p>Registration for <strong th:text="${registration.event.title}">Event</strong></p>
+            <h1 style="color: var(--primary); margin: 15px 0;">$50.00</h1>
+        </div>
+
+        <form th:action="@{/payment/process}" method="post">
+            <input type="hidden" name="registrationId" th:value="${registration.id}">
+            
+            <div class="form-group">
+                <label for="cardNumber">Card Number (Simulated)</label>
+                <div class="input-icon">
+                    <i class="fas fa-credit-card"></i>
+                    <input type="text" id="cardNumber" name="cardNumber" class="form-control" placeholder="1111 2222 3333 4444" required style="padding-left: 40px;" minlength="16" maxlength="19">
+                </div>
+                <small style="color: #888;">Enter any 16-digit number to simulate a successful payment.</small>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="text" id="expiryDate" name="expiryDate" class="form-control" placeholder="MM/YY" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="form-control" placeholder="123" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px; font-size: 1.1rem; padding: 12px;">Pay $50.00 & Get Ticket</button>
+        </form>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

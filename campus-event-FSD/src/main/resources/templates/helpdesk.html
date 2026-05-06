@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Help Desk')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page-content">
+    
+    <div class="section-header">
+        <h2><i class="fas fa-life-ring"></i> Help Desk</h2>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" style="margin-bottom: 20px;">
+        <i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span>
+    </div>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        
+        <!-- Submit Request Form -->
+        <div class="glass-panel" style="flex: 1; min-width: 300px;">
+            <h3>Submit a New Request</h3>
+            <form th:action="@{/helpdesk/submit}" th:object="${newRequest}" method="post">
+                <div class="form-group">
+                    <label for="title">Issue Title</label>
+                    <input type="text" id="title" th:field="*{title}" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" th:field="*{category}" class="form-control" required>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Payment Issue">Payment Issue</option>
+                        <option value="Technical Issue">Technical Issue</option>
+                        <option value="Event Feedback">Event Feedback</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" th:field="*{description}" class="form-control" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%;">Submit Request</button>
+            </form>
+        </div>
+
+        <!-- Previous Requests -->
+        <div class="glass-panel" style="flex: 2; min-width: 400px;">
+            <h3>My Requests</h3>
+            
+            <div th:if="${#lists.isEmpty(requests)}" style="text-align: center; color: #888; padding: 20px;">
+                You have not submitted any help requests.
+            </div>
+
+            <div th:each="req : ${requests}" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="margin: 0;" th:text="${req.title}">Title</h4>
+                    <span class="badge" th:text="${req.status}" 
+                          th:style="${req.status == 'RESOLVED' ? 'background: #10b981;' : (req.status == 'IN_PROGRESS' ? 'background: #f59e0b;' : 'background: #3b82f6;')}">Status</span>
+                </div>
+                <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 10px;">
+                    <span><i class="fas fa-tag"></i> <span th:text="${req.category}">Category</span></span> | 
+                    <span><i class="far fa-clock"></i> <span th:text="${#temporals.format(req.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span></span>
+                </div>
+                <p style="margin: 0; line-height: 1.5;" th:text="${req.description}">Description</p>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

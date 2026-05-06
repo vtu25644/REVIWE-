@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Your Ticket')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page-content" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    
+    <div class="glass-panel" style="max-width: 600px; width: 100%;">
+        
+        <div th:if="${successMessage}" class="alert alert-success" style="margin-bottom: 20px;">
+            <i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 20px;">
+            <i class="fas fa-ticket-alt fa-3x" style="color: var(--primary); margin-bottom: 15px;"></i>
+            <h2>Official Event Ticket</h2>
+            <p>Ticket ID: <strong th:text="${ticket.ticketId}">TKT-123</strong></p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 15px; font-size: 1.1rem;">
+            <div><strong style="color: var(--primary);">Event:</strong> <span th:text="${ticket.registration.event.title}">Title</span></div>
+            <div><strong style="color: var(--primary);">Date:</strong> <span th:text="${#temporals.format(ticket.registration.event.eventDate, 'MMM dd, yyyy HH:mm')}">Date</span></div>
+            <div><strong style="color: var(--primary);">Location:</strong> <span th:text="${ticket.registration.event.department} + ' Department'">Location</span></div>
+            <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div><strong style="color: var(--primary);">Attendee:</strong> <span th:text="${ticket.registration.user.name}">Name</span> (<span th:text="${ticket.registration.user.username}">ID</span>)</div>
+            <div><strong style="color: var(--primary);">Generated on:</strong> <span th:text="${#temporals.format(ticket.generatedDate, 'MMM dd, yyyy HH:mm')}">Date</span></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a th:href="@{/ticket/download/{id}(id=${ticket.id})}" class="btn-primary"><i class="fas fa-file-pdf"></i> Download PDF Ticket</a>
+            <a th:href="@{/my-events}" class="btn-outline" style="margin-left: 10px;">My Events</a>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>
